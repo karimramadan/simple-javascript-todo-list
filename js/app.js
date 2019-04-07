@@ -8,7 +8,12 @@ let todoList = {
         view.displayTodos()
     },
     editTodo: function(position, newText){
+        newText = prompt("What is in your mind?");
         this.todos[position].todoText = newText;
+        view.displayTodos()
+    },
+    swipeTodo: function(position, newPosition){
+        this.todos.splice(newPosition, 0, this.todos.splice(position, 1)[0]);
         view.displayTodos()
     },
     deleteTodo: function(position){
@@ -41,18 +46,7 @@ let handlers = {
     addTodo: function(){
         todoList.addTodo( document.getElementById("todo_input").value );
         document.getElementById("todo_input").value = "";
-    },
-    toggleTodo: function(){
-        todoList.todos.forEach(function(todo){
-            todoUl.addEventListener("click", function(event){
-                concole.log(event.target.id);
-                if( event.target.className === "todoli" ){
-                    todoList.toggleTodo(event.target.id)
-                }
-            })
-        });
-        view.displayTodos()
-    }    
+    }
 }
 
 
@@ -62,25 +56,71 @@ let view = {
         todoUl.innerHTML = '';
         todoList.todos.forEach(function(todo, position){
             let todoLi = document.createElement('li');
-            todoLi.innerHTML = todo.todoText;
+            let todoText = document.createElement('span');
+            todoText.innerHTML = todo.todoText;
+            todoLi.appendChild( todoText );
             todoLi.className = todo.completed;
             todoLi.id = position;
-            todoLi.appendChild( this.createDeleteButton() );
+            let buttonsHolder = document.createElement('div');
+            buttonsHolder.className = "buttons-holder";
+            todoLi.appendChild( buttonsHolder );
+            buttonsHolder.appendChild( this.createUpButton() );
+            buttonsHolder.appendChild( this.createDownButton() );
+            buttonsHolder.appendChild( this.createToggleButton() );
+            buttonsHolder.appendChild( this.createDeleteButton() );
+            buttonsHolder.appendChild( this.createEditButton() );
             todoUl.appendChild( todoLi );
         }, this);
+    },   
+    createEditButton : function(){
+        let editButton = document.createElement('button');
+        editButton.className = "edit-button";
+        return editButton;
     },
     createDeleteButton : function(){
         let deleteButton = document.createElement('button');
         deleteButton.className = "delete-button";
-        // deleteButton.innerText = "Delete";
         return deleteButton;
-    }
+    },
+    createToggleButton : function(){
+        let toggleButton = document.createElement('button');
+        toggleButton.className = "toggle-button";
+        return toggleButton;
+    },
+    createUpButton : function(){
+        let upButton = document.createElement('button');
+        upButton.className = "up-button";
+        return upButton;
+    },
+    createDownButton : function(){
+        let downButton = document.createElement('button');
+        downButton.className = "down-button";
+        return downButton;
+    }    
 }
 
 
-let todoUl = document.getElementById('todolist');
-todoUl.addEventListener('click', function(event){
+let container = document.getElementById("box");
+container.addEventListener('click', function(event){
+    if( event.target.id === "add-todo" ){
+        handlers.addTodo();
+    }
+    if( event.target.className === "up-button" ){
+        todoList.swipeTodo(event.target.parentNode.parentNode.id, event.target.parentNode.parentNode.id - 1);
+    }
+    if( event.target.className === "down-button" ){
+        todoList.swipeTodo(event.target.parentNode.parentNode.id, event.target.parentNode.parentNode.id + 1);
+    }
+    if( event.target.id === "toggle-all" ){
+        todoList.toggleAll();
+    }
     if( event.target.className === "delete-button" ){
-        todoList.deleteTodo(event.target.parentNode.id);
-    }    
+        todoList.deleteTodo(event.target.parentNode.parentNode.id);
+    }
+    if( event.target.className === "edit-button" ){
+        todoList.editTodo(event.target.parentNode.parentNode.id);
+    }
+    if( event.target.className === "toggle-button" ){
+        todoList.toggleTodo(event.target.parentNode.parentNode.id);
+    }
 })
