@@ -35,6 +35,10 @@ body{
   transition: box-shadow 0.25s ease, transform 0.25s ease;
   width: 400px;
 }
+#container{
+  max-height: 490px;
+  overflow-x: hidden;
+}
 .input-holder{
   display: flex;
   flex-direction: row;
