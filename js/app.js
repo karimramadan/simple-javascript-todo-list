@@ -12,10 +12,6 @@ let todoList = {
         this.todos[position].todoText = newText;
         view.displayTodos()
     },
-    swipeTodo: function(position, newPosition){
-        this.todos.splice(newPosition, 0, this.todos.splice(position, 1)[0]);
-        view.displayTodos()
-    },
     deleteTodo: function(position){
         this.todos.splice(position, 1);
         view.displayTodos()
@@ -106,10 +102,20 @@ container.addEventListener('click', function(event){
         handlers.addTodo();
     }
     if( event.target.className === "up-button" ){
-        todoList.swipeTodo(event.target.parentNode.parentNode.id, event.target.parentNode.parentNode.id - 1);
+        let li = event.target.parentNode.parentNode;
+        let prevLi = li.previousElementSibling;
+        let ul = li.parentNode;
+        if (prevLi) {
+            ul.insertBefore(li, prevLi);
+        }
     }
     if( event.target.className === "down-button" ){
-        todoList.swipeTodo(event.target.parentNode.parentNode.id, event.target.parentNode.parentNode.id + 1);
+        let li = event.target.parentNode.parentNode;
+        let nextLi = li.nextElementSibling;
+        let ul = li.parentNode;
+        if (nextLi) {
+            ul.insertBefore(nextLi, li);
+        }
     }
     if( event.target.id === "toggle-all" ){
         todoList.toggleAll();
