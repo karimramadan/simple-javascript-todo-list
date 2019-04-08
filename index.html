@@ -10,23 +10,26 @@
     <title>Todo</title>
 </head>
 <body>
-    <article id="box">
-        <header>
-                <h3>Todo List</h3>
-        </header>
-        <div class="input-holder">
-            <input type="text" id="todo_input">
-            <button  id="add-todo">Add</button>
-        </div>
+    <section id="box">
+        <article>
+            <header>
+                    <h3>Todo List</h3>
+            </header>
+            <div class="input-holder">
+                <input type="text" id="todo_input">
+                <button  id="add-todo">Add</button>
+            </div>
 
-        <ul id="todolist">
-            <li>There are no todos to display</li>  
-        </ul>
-
-        <footer>
-            <button id="toggle-all">Toggle all</button>
-        </footer>        
-    </article>
+            <div id="container">
+                <ul id="todolist">
+                    <li>There are no todos to display</li>  
+                </ul>
+            </div>
+            <footer>
+                <button id="toggle-all">Toggle all</button>
+            </footer>
+        </article>        
+    </section>
 
     
     <script src="js/app.js"></script>
